@@ -80,6 +80,7 @@ RUN for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/
 	/etc/thruk/panorama \
 	/etc/thruk/thruk_local.conf \
 	/etc/thruk/thruk_local.d && \
+	a2dissite 000-default.conf && \
 	a2enmod remoteip rewrite deflate headers && \
 	a2enconf thruk thruk_cookie_auth_vhost
 EXPOSE 80
