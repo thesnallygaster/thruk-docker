@@ -47,7 +47,10 @@ RUN if [ -n "$APT_PROXY" ]; then \
 RUN apt update -y  && apt install --no-install-recommends -y \
 	ca-certificates \
 	apache2 \
-	libapache2-mod-fcgid && \
+	libapache2-mod-fcgid \
+	liblwp-protocol-https-perl \
+	libgd3 \
+	libmysqlclient21 && \
 	rm -rf /var/lib/apt/lists/*
 COPY --from=build /build/target/etc /etc
 COPY --from=build /build/target/usr /usr
