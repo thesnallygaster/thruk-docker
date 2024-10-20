@@ -85,7 +85,8 @@ RUN for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/
 	a2disconf other-vhosts-access-log.conf && \
 	a2enmod remoteip rewrite deflate headers && \
 	a2enconf remoteip thruk thruk_cookie_auth_vhost && \
-	sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf
+	sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf && \
+	echo "ServerName localhost" >> /etc/apache2/apache2.conf
 EXPOSE 80
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
