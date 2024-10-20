@@ -83,6 +83,7 @@ RUN sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\n
 	/etc/thruk/thruk_local.conf \
 	/etc/thruk/thruk_local.d && \
 	a2dissite 000-default.conf && \
+	a2disconf other-vhosts-access-log.conf && \
 	a2enmod remoteip rewrite deflate headers && \
 	a2enconf remoteip thruk thruk_cookie_auth_vhost
 EXPOSE 80
