@@ -87,7 +87,8 @@ RUN for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/
 	a2enmod remoteip rewrite deflate headers ldap authnz_ldap && \
 	a2enconf remoteip ldap thruk thruk_cookie_auth_vhost && \
 	sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf && \
-	echo "ServerName localhost" >> /etc/apache2/apache2.conf
+	echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+	sed -i 's/log4perl.appender.ThrukLog=Log::Log4perl::Appender::File/log4perl.appender.ThrukLog=Log::Log4perl::Appender::Screen/g;s/log4perl.appender.ThrukLog.filename=\/var\/log\/thruk\/thruk.log/log4perl.appender.ThrukLog.stderr=0/g' /etc/thruk/log4perl.conf
 EXPOSE 80
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
