@@ -52,6 +52,7 @@ RUN apt update -y  && apt install --no-install-recommends -y \
 	libgd3 \
 	libmysqlclient21 && \
 	rm -rf /var/lib/apt/lists/*
+COPY templates/remoteip.conf /etc/apache2/conf-available/remoteip.conf
 COPY --from=build /build/target/etc /etc
 COPY --from=build /build/target/usr /usr
 COPY --from=build /build/target/var /var
@@ -83,7 +84,7 @@ RUN sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\n
 	/etc/thruk/thruk_local.d && \
 	a2dissite 000-default.conf && \
 	a2enmod remoteip rewrite deflate headers && \
-	a2enconf thruk thruk_cookie_auth_vhost
+	a2enconf remoteip thruk thruk_cookie_auth_vhost
 EXPOSE 80
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
