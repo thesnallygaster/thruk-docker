@@ -84,7 +84,6 @@ RUN for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/
 	/etc/thruk/thruk_local.conf \
 	/etc/thruk/thruk_local.d && \
 	a2dissite 000-default.conf && \
-	a2disconf other-vhosts-access-log.conf && \
 	a2enmod remoteip rewrite deflate headers ldap authnz_ldap && \
 	a2enconf remoteip ldap thruk thruk_cookie_auth_vhost && \
 	sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf && \
