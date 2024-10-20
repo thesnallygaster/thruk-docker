@@ -55,7 +55,7 @@ RUN apt update -y  && apt install --no-install-recommends -y \
 COPY --from=build /build/target/etc /etc
 COPY --from=build /build/target/usr /usr
 COPY --from=build /build/target/var /var
-RUN sed 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf && \
+RUN sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf && \
 	for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/${APACHE_RUN_USER}/www-data/g' $i; done && \
 	for i in $(grep -nrl $\{APACHE_RUN_GROUP /etc/apache2 | uniq ); do sed -i 's/${APACHE_RUN_GROUP}/www-data/g' $i; done && \
 	for i in $(grep -nrl $\{APACHE_PID_FILE /etc/apache2 | uniq ); do sed -i 's/${APACHE_PID_FILE}/\/var\/run\/apache2\/apache2.pid/g' $i; done && \
