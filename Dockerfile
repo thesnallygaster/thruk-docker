@@ -56,8 +56,7 @@ COPY templates/remoteip.conf /etc/apache2/conf-available/remoteip.conf
 COPY --from=build /build/target/etc /etc
 COPY --from=build /build/target/usr /usr
 COPY --from=build /build/target/var /var
-RUN sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf && \
-	for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/${APACHE_RUN_USER}/www-data/g' $i; done && \
+RUN for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/${APACHE_RUN_USER}/www-data/g' $i; done && \
 	for i in $(grep -nrl $\{APACHE_RUN_GROUP /etc/apache2 | uniq ); do sed -i 's/${APACHE_RUN_GROUP}/www-data/g' $i; done && \
 	for i in $(grep -nrl $\{APACHE_PID_FILE /etc/apache2 | uniq ); do sed -i 's/${APACHE_PID_FILE}/\/var\/run\/apache2\/apache2.pid/g' $i; done && \
 	for i in $(grep -nrl $\{APACHE_RUN_DIR /etc/apache2 | uniq ); do sed -i 's/${APACHE_RUN_DIR}/\/var\/run\/apache2/g' $i; done && \
@@ -85,7 +84,8 @@ RUN sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\n
 	a2dissite 000-default.conf && \
 	a2disconf other-vhosts-access-log.conf && \
 	a2enmod remoteip rewrite deflate headers && \
-	a2enconf remoteip thruk thruk_cookie_auth_vhost
+	a2enconf remoteip thruk thruk_cookie_auth_vhost && \
+	sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf
 EXPOSE 80
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
