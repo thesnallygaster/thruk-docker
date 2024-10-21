@@ -55,6 +55,7 @@ RUN apt update -y  && apt install --no-install-recommends -y \
 	rm -rf /var/lib/apt/lists/*
 COPY templates/ldap.conf /etc/apache2/conf-available/ldap.conf
 COPY templates/remoteip.conf /etc/apache2/conf-available/remoteip.conf
+COPY templates/thruk_rewrite.conf /etc/apache2/conf-available/thruk_rewrite.conf
 COPY --from=build /build/target/etc /etc
 COPY --from=build /build/target/usr /usr
 COPY --from=build /build/target/var /var
@@ -85,7 +86,7 @@ RUN for i in $(grep -nrl $\{APACHE_RUN_USER /etc/apache2 | uniq ); do sed -i 's/
 	/etc/thruk/thruk_local.d && \
 	a2dissite 000-default.conf && \
 	a2enmod remoteip rewrite deflate headers ldap authnz_ldap && \
-	a2enconf remoteip ldap thruk thruk_cookie_auth_vhost && \
+	a2enconf remoteip ldap thruk thruk_cookie_auth_vhost thruk_rewrite && \
 	sed -i 's/ErrorLog\ \/var\/log\/apache2\/error.log/ErrorLog\ \/dev\/stderr\nCustomLog\ \/dev\/stdout\ combined/g' /etc/apache2/apache2.conf && \
 	echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
 	sed -i 's/log4perl.appender.ThrukLog=Log::Log4perl::Appender::File/log4perl.appender.ThrukLog=Log::Log4perl::Appender::Screen/g;s/log4perl.appender.ThrukLog.filename=\/var\/log\/thruk\/thruk.log/log4perl.appender.ThrukLog.stderr=0/g' /etc/thruk/log4perl.conf
