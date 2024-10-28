@@ -51,7 +51,8 @@ RUN apt update -y  && apt install --no-install-recommends -y \
 	liblwp-protocol-https-perl \
 	libgd3 \
 	libmysqlclient21 \
-	libaprutil1-ldap && \
+	libaprutil1-ldap \
+	curl && \
 	rm -rf /var/lib/apt/lists/*
 COPY templates/ldap.conf /etc/apache2/conf-available/ldap.conf
 COPY templates/remoteip.conf /etc/apache2/conf-available/remoteip.conf
