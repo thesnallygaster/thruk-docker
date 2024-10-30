@@ -45,6 +45,7 @@ RUN apk update && apk upgrade --no-cache && apk add --no-cache \
 	perl-lwp-protocol-https \
 	gd \
 	mariadb-client \
+	bash \
 	curl
 COPY templates/ldap.conf /etc/apache2/conf.d/ldap_ssl_verify.conf
 COPY templates/remoteip.conf /etc/apache2/conf.d/remoteip.conf
