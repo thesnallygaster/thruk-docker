@@ -25,8 +25,9 @@ RUN apt update -y && apt install --no-install-recommends -y \
 ARG THRUK_VERSION
 RUN cd /build && \
 	curl -sSL -o thruk_libs-v${THRUK_VERSION}.tar.gz https://github.com/sni/thruk_libs/archive/refs/tags/v${THRUK_VERSION}.tar.gz && \
-	tar -xzf thruk_libs-v${THRUK_VERSION}.tar.gz && \
-	cd /build/thruk_libs-${THRUK_VERSION} && \
+	tar -xzf thruk_libs-v${THRUK_VERSION}.tar.gz
+COPY files/Crypt-Rijndael.114.patch /build/thruk_libs-${THRUK_VERSION}/patches/Crypt-Rijndael.114.patch
+RUN cd /build/thruk_libs-${THRUK_VERSION} && \
 	make -j"$(nproc)" && \
 	DESTDIR=/build/target make installbuilddeps && \
 	DESTDIR=/build/target make install
