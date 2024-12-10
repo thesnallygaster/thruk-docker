@@ -1,7 +1,7 @@
 ARG THRUK_VERSION="3.20"
-ARG UBUNTU_VERSION="noble"
+ARG DEBIAN_VERSION="bookworm"
 
-FROM ubuntu:${UBUNTU_VERSION} AS build
+FROM debian:${DEBIAN_VERSION} AS build
 ARG APT_PROXY
 WORKDIR /build
 # Create an apt proxy configuration
@@ -9,12 +9,15 @@ RUN if [ -n "$APT_PROXY" ]; then \
         echo "Acquire::http::Proxy \"$APT_PROXY\";" > /etc/apt/apt.conf.d/01proxy; \
     fi
 RUN apt update -y && apt install --no-install-recommends -y \
+	perl-modules && \
+	apt install --no-install-recommends -y \
 	build-essential \
 	ca-certificates \
 	curl \
 	rsync \
 	libgd-dev \
-	libmysqlclient-dev \
+	libmariadb-dev \
+	libmariadb-dev-compat \
 	chrpath \
 	libmodule-install-perl \
 	nodejs \
@@ -38,19 +41,21 @@ RUN cd /build && \
 	for i in $(grep -nrl build\/target /build/target | uniq); do sed -i 's/\/build\/target//g' $i; done && \
 	for i in $(grep -nrl usr\/local\/tmp /build/target | uniq); do sed -i 's/\/usr\/local\/tmp/\/var\/cache\/thruk/g' $i; done
 
-FROM ubuntu:${UBUNTU_VERSION} AS final
+FROM debian:${DEBIAN_VERSION} AS final
 ARG APT_PROXY
 # Create an apt proxy configuration
 RUN if [ -n "$APT_PROXY" ]; then \
         echo "Acquire::http::Proxy \"$APT_PROXY\";" > /etc/apt/apt.conf.d/01proxy; \
     fi
 RUN apt update -y  && apt install --no-install-recommends -y \
+	perl-modules && \
+	apt install --no-install-recommends -y \
 	ca-certificates \
 	apache2 \
 	libapache2-mod-fcgid \
 	liblwp-protocol-https-perl \
 	libgd3 \
-	libmysqlclient21 \
+	libmariadb3 \
 	libaprutil1-ldap \
 	curl && \
 	rm -rf /var/lib/apt/lists/*
