@@ -28,7 +28,7 @@ RUN cd /build/thruk_libs-${THRUK_VERSION} && \
 RUN cd /build && \
 	curl -sSL -o thruk-v${THRUK_VERSION}.tar.gz https://github.com/sni/thruk/archive/refs/tags/v${THRUK_VERSION}.tar.gz && \
 	tar -xzf thruk-v${THRUK_VERSION}.tar.gz && \
-	cd /build/Thruk-${THRUK_VERSION} && \
+	cd /build/thruk-${THRUK_VERSION} && \
 	PERL5LIB="/build/target/usr/lib/thruk/perl5:$PERL5LIB" perl Makefile.PL && \
 	PERL5LIB="/build/target/usr/lib/thruk/perl5:$PERL5LIB" ./configure --prefix="" --exec-prefix="" --bindir=/build/target/usr/bin --libdir=/build/target/usr/lib/thruk --sysconfdir=/build/target/etc/thruk --localstatedir=/build/target/var/lib/thruk --datadir=/build/target/usr/share/thruk --mandir=/build/target/usr/share/man --with-initdir=/build/target/etc/init.d --with-logdir=/build/target/var/log/thruk --with-cachedir=/build/target/var/cache/thruk --with-tmpdir=/build/target/var/cache/thruk --with-logrotatedir=/build/target/etc/logrotate.d --with-bashcompletedir=/build/target/etc/bash_completion.d --with-thruk-user=apache --with-thruk-group=apache --with-thruk-libs=/build/target/usr/lib/thruk/perl5 --with-httpd-conf=/build/target/etc/apache2/conf.d --with-htmlurl=/thruk --with-checkresultdir=/var/cache/naemon/checkresults --with-unsafeallow3f && \
 	make -j"$(nproc)" && \
